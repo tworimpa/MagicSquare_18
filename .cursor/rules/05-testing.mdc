@@ -1,0 +1,35 @@
+---
+description: pytest 테스트 규칙 — AAA, fixture scope, Test ID 매핑
+alwaysApply: true
+---
+
+# 05. Testing
+
+1. **Framework**: pytest
+2. **Pattern**: AAA (Arrange-Act-Assert)
+3. **Coverage minimum**: 80%
+
+## 5.1 Fixture Scope
+
+| # | Scope | 용도 |
+|---|-------|------|
+| 1 | function | 단일 테스트 격리용 입력 격자(`int[4][4]`), Solution6 기대값 |
+| 2 | class | 동일 VO/Service를 공유하는 테스트 클래스 내부 |
+| 3 | module | 레이어별 공통 Mock (Boundary 트랙 Domain Mock, MatrixRepository Mock) |
+| 4 | session | 프로젝트 전역 상수(Magic Constant 34, Error Code enum) — 남용 금지 |
+
+## 5.2 Test ID Mapping
+
+| # | Track | Path | ID prefix |
+|---|-------|------|-----------|
+| 1 | Domain | `tests/entity/` | D-H*, D-F*, D-E* |
+| 2 | Boundary | `tests/boundary/` | U-C* |
+| 3 | Data | `tests/data/` | DL-* |
+| 4 | Integration | `tests/integration/` | IT-* |
+
+## 5.3 AAA Structure
+
+1. **Arrange (Given)**: 입력 격자·Mock·기대 Error Code 준비
+2. **Act (When)**: 대상 함수/Use Case 호출
+3. **Assert (Then)**: 반환값·예외·INV-* 불변조건 검증
+4. **Naming convention**: `test_` 접두사 필수

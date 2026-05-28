@@ -1,0 +1,201 @@
+################################################################################
+project:
+  name: Magic Square 4×4
+  purpose: 4×4 마방진 TDD·ECB 아키텍처 연습 프로젝트
+  primary_capability: 규칙 충족 여부 자동 판정 (검증)
+  secondary_capability: 유효한 4×4 배치 생성·제시
+  input_contract: "int[4][4] (0=빈칸, 빈칸 2개, 0 또는 1~16, non-zero 중복 금지)"
+  output_contract: "int[6] = [r1,c1,n1,r2,c2,n2] (1-index; Case A/B 배치 규칙)"
+  docs_ssot:
+    - docs/01-problem-definition.md
+    - docs/03-acceptance-criteria.md
+    - docs/04-dual-track-clean-architecture-design.md
+  domain_red_order: "D-F05 → D-F03 → D-F06 → D-F01 → D-H04 → D-H01"
+
+################################################################################
+code_style:
+  python_version: "3.10+"
+  style_guide: PEP8 엄격 준수
+  type_hints: 모든 함수 파라미터와 반환값에 필수
+  docstring: Google 스타일, 모든 public 메서드에 필수
+  max_line_length: 88
+
+################################################################################
+architecture:
+  pattern: ECB (Entity-Boundary-Control)
+  layers:
+    boundary:
+      role: 외부 입출력 담당 (UI, API, CLI)
+      responsibilities:
+        - int[4][4] 입력 계약 검증 (null, 크기, 범위, 빈칸 수, 중복)
+        - Domain 호출 및 int[6] 출력 포맷 검증
+        - ErrorResponse / SuccessResponse 매핑 (에러 메시지 8종 완전 일치)
+      examples:
+        - InputValidator
+        - OutputValidator
+        - ErrorMapper
+        - UIBoundary / SolveFacade (진입점)
+    control:
+      role: 비즈니스 로직 오케스트레이션 담당
+      responsibilities:
+        - Boundary와 Entity 사이 Use Case 조율
+        - SolvePartialMagicSquare 실행 흐름 연결
+        - MatrixRepository 등 외부 저장소 호출 (선택)
+      examples:
+        - SolveFacade
+        - ApplicationService
+    entity:
+      role: 도메인 데이터 및 규칙 담당
+      responsibilities:
+        - Value Object (PartialGrid4x4, Solution6, EmptyCellPair 등)
+        - Domain Service (MagicSquareValidator, CompletionStrategy 등)
+        - 불변조건 INV-G*, INV-M*, INV-S* 검증
+        - 외부 레이어·I/O에 대한 의존 금지
+      examples:
+        - PartialGrid4x4
+        - MagicSquareValidator
+        - SolvePartialMagicSquare
+  dependency_direction:
+    allowed:
+      - "boundary → control"
+      - "boundary → entity (Use Case 직접 호출, Facade 없을 때)"
+      - "control → entity"
+      - "control → data (Repository 인터페이스, DTO만)"
+    forbidden:
+      - "entity → boundary"
+      - "entity → control"
+      - "entity → data"
+      - "boundary → data (control 경유 필수)"
+  dual_track:
+    domain_track: "Entity RED 우선 (D-F05 → D-H01); Domain Mock 없이 순수 pytest"
+    boundary_track: "Boundary Contract RED; Domain은 Mock; Domain 로직 유입 금지"
+
+################################################################################
+tdd_rules:
+  red_phase:
+    description: 실패하는 테스트를 먼저 작성하고, pytest로 RED를 확인한 뒤 구현에 착수한다.
+    rules:
+      - 구현 코드 작성 전에 대상 Test ID(D-*, U-*, DL-*, IT-*)에 맞는 테스트를 작성한다.
+      - pytest 실행으로 해당 테스트가 RED(실패)임을 확인한다.
+      - docs/04의 RED 우선 순서(D-F05 → D-H01)를 따른다.
+      - Dual-Track 시 Domain 트랙과 Boundary 트랙을 혼합하지 않는다.
+    must_not:
+      - RED 확인 없이 production 코드(src/)를 추가·수정하지 않는다.
+      - 테스트를 통과시키기 위해 assertion을 약화하지 않는다.
+      - GREEN을 가정하고 테스트를 건너뛰지 않는다.
+  green_phase:
+    description: RED 테스트를 통과시키는 최소 코드만 작성하여 GREEN 상태를 만든다.
+    rules:
+      - 현재 RED 테스트를 통과시키는 최소 코드만 작성한다.
+      - pytest 실행으로 해당 테스트가 GREEN(통과)임을 확인한다.
+      - Entity 레이어는 외부 의존 없이 순수 Python으로 구현한다.
+    must_not:
+      - 이 단계에서 리팩터링·구조 개선·부가 기능 추가를 하지 않는다.
+      - 테스트를 수정·삭제·약화하여 통과시키지 않는다.
+      - Boundary 레이어에 Domain 알고리즘을 직접 구현하지 않는다.
+  refactor_phase:
+    description: 관찰 가능한 동작은 유지한 채 구조·가독성·중복을 개선한다.
+    rules:
+      - 리팩터링 전후 pytest 전체가 GREEN임을 유지한다.
+      - 레이어별 커버리지 목표를 유지하거나 개선한다 (Entity ≥95%, Boundary ≥85%, Data ≥80%).
+      - ECB 의존성 방향을 위반하지 않는다.
+      - docs/04 회귀 규칙(RG-01~RG-05)을 준수한다.
+    must_not:
+      - 관찰 가능한 동작(기능)을 변경하지 않는다.
+      - 테스트 assertion을 기능 변경 없이 임의로 수정하지 않는다.
+      - Entity에 I/O·Boundary·Repository 의존을 추가하지 않는다.
+
+################################################################################
+testing:
+  framework: pytest
+  pattern: AAA (Arrange-Act-Assert)
+  coverage_minimum: "80%"
+  fixture_scope:
+    function: "단일 테스트 격리용 입력 격자(int[4][4]), Solution6 기대값"
+    class: "동일 VO/Service를 공유하는 테스트 클래스 내부"
+    module: "레이어별 공통 Mock (Boundary 트랙 Domain Mock, MatrixRepository Mock)"
+    session: "프로젝트 전역 상수(Magic Constant 34, Error Code enum) — 남용 금지"
+  naming_convention: test_ 접두사 필수
+  test_id_mapping:
+    domain: "tests/entity/ — D-H*, D-F*, D-E*"
+    boundary: "tests/boundary/ — U-C*"
+    data: "tests/data/ — DL-*"
+    integration: "tests/integration/ — IT-*"
+  aaa_structure:
+    arrange: "Given — 입력 격자·Mock·기대 Error Code 준비"
+    act: "When — 대상 함수/Use Case 호출"
+    assert: "Then — 반환값·예외·INV-* 불변조건 검증"
+
+################################################################################
+forbidden:
+  - pattern: "print(...)"
+    reason: "디버깅 출력은 테스트·로깅 체계를 우회하여 TDD 피드백 루프를 훼손한다."
+    alternative: "pytest assertion으로 검증하거나 logging 모듈을 사용한다."
+  - pattern: "리터럴 34, 16, 4 등 도메인 상수를 코드에 직접 산재"
+    reason: "하드코딩 상수는 불변조건 변경 시 회귀 위험을 높이고 의미를 불명확하게 한다."
+    alternative: "entity/constants.py 또는 Value Object 내부 named constant로 정의한다."
+  - pattern: "except: 또는 except Exception: (구체적 예외 없이 pass)"
+    reason: "단독 except는 DomainValidationError 등 계약 위반을 숨긴다."
+    alternative: "DomainValidationError, SOLVE_IMPOSSIBLE 등 구체 예외를 catch하고 재발생·매핑한다."
+  - pattern: "assertion 완화·테스트 삭제·@pytest.mark.skip(무근거)"
+    reason: "테스트 약화는 RED/GREEN 사이클을 무력화하고 회귀를 유발한다."
+    alternative: "production 코드를 수정하여 테스트를 통과시킨다 (green_phase)."
+  - pattern: "RED 확인 없이 src/ production 코드 작성"
+    reason: "테스트 없는 구현은 TDD 계약과 Dual-Track 설계 목적에 반한다."
+    alternative: "tdd_rules.red_phase를 먼저 수행한다."
+  - pattern: "Boundary 테스트에서 Domain 로직 직접 검증"
+    reason: "Dual-Track Boundary 트랙은 계약만 검증해야 한다 (RG-05)."
+    alternative: "Domain은 Mock하고 입출력 스키마·Error Code·메시지만 검증한다."
+
+################################################################################
+file_structure: |
+  # src/
+  #   magicsquare/
+  #     __init__.py
+  #     boundary/          # UI, API, CLI — 입출력 계약·에러 매핑
+  #       __init__.py
+  #       input_validator.py
+  #       output_validator.py
+  #       error_mapper.py
+  #       ui_boundary.py
+  #     control/           # Use Case 오케스트레이션
+  #       __init__.py
+  #       solve_facade.py
+  #     entity/            # VO, Domain Service, 불변조건
+  #       __init__.py
+  #       constants.py
+  #       partial_grid_4x4.py
+  #       magic_square_validator.py
+  #       completion_strategy.py
+  #       solve_partial_magic_square.py
+  #     data/              # Repository (ECB 외부, control이 소유)
+  #       __init__.py
+  #       matrix_repository.py
+  # tests/
+  #   conftest.py
+  #   entity/              # D-H*, D-F*, D-E*
+  #   boundary/            # U-C* (Domain Mock)
+  #   control/
+  #   data/                # DL-*
+  #   integration/         # IT-*
+
+################################################################################
+ai_behavior:
+  before_coding:
+    - "코드 작성 전 docs/03·docs/04에서 해당 Test ID와 계약을 확인한다."
+    - "코드 작성 전 tests/ 아래 관련 레이어·Test ID 테스트 파일 존재 여부를 확인한다."
+    - "Entity 작업 시 tests/entity/ RED 상태를 먼저 확인한다."
+    - "Boundary 작업 시 Domain Mock 사용 여부와 tests/boundary/ 계약 테스트를 확인한다."
+  during_coding:
+    - "ECB 레이어 경계 위반 금지 — entity는 boundary/control/data를 import하지 않는다."
+    - "타입힌트 없는 함수 생성 금지 — 모든 public 함수에 파라미터·반환 type hint 필수."
+    - "현재 TDD phase(red/green/refactor)를 명시하고 해당 phase 규칙만 적용한다."
+    - "MagicSquare 전역 계약(int[4][4]→int[6], 1-index, Case A/B)을 위반하는 코드를 생성하지 않는다."
+  after_coding:
+    - "pytest를 실행하여 RED/GREEN 상태를 보고한다."
+    - "tdd_rules 위반(RED 없이 구현, green_phase 리팩터링, 테스트 약화) 시 ⚠️ 경고를 출력한다."
+    - "생성·수정 파일이 file_structure 트리와 일치하는지 확인한다."
+  must_not:
+    - "사용자 요청 없이 테스트 assertion을 약화·삭제하지 않는다."
+    - "print()로 디버깅 코드를 남기지 않는다."
+    - "docs/ SSOT와 다른 입출력 계약·에러 메시지를 임의로 정의하지 않는다."

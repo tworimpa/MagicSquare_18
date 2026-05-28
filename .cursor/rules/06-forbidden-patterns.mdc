@@ -1,0 +1,15 @@
+---
+description: 금지 패턴 — print, 하드코딩 상수, 테스트 약화 등
+alwaysApply: true
+---
+
+# 06. Forbidden Patterns
+
+| # | Pattern | Reason | Alternative |
+|---|---------|--------|-------------|
+| 1 | `print(...)` | 디버깅 출력은 TDD 피드백 루프를 훼손 | pytest assertion 또는 `logging` 모듈 |
+| 2 | 리터럴 34, 16, 4 등 도메인 상수 산재 | 하드코딩 상수는 회귀 위험·의미 불명확 | `entity/constants.py` 또는 VO 내부 named constant |
+| 3 | `except:` / `except Exception:` (pass) | DomainValidationError 등 계약 위반 숨김 | 구체 예외 catch 후 재발생·매핑 |
+| 4 | assertion 약화·테스트 삭제·`@pytest.mark.skip`(무근거) | RED/GREEN 사이클 무력화 | production 코드 수정 (`04-tdd-rules` GREEN phase) |
+| 5 | RED 확인 없이 `src/` production 코드 작성 | TDD·Dual-Track 목적 위반 | `04-tdd-rules` RED phase 먼저 수행 |
+| 6 | Boundary 테스트에서 Domain 로직 직접 검증 | Dual-Track Boundary는 계약만 검증 (RG-05) | Domain Mock, 입출력·Error Code·메시지만 검증 |

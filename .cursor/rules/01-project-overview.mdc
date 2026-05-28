@@ -1,0 +1,18 @@
+---
+description: Magic Square 4×4 프로젝트 개요, 입출력 계약, SSOT 문서
+alwaysApply: true
+---
+
+# 01. Project Overview
+
+1. **Name**: Magic Square 4×4
+2. **Purpose**: 4×4 마방진 TDD·ECB 아키텍처 연습 프로젝트
+3. **Primary capability**: 규칙 충족 여부 자동 판정 (검증)
+4. **Secondary capability**: 유효한 4×4 배치 생성·제시
+5. **Input contract**: `int[4][4]` (0=빈칸, 빈칸 2개, 0 또는 1~16, non-zero 중복 금지)
+6. **Output contract**: `int[6] = [r1,c1,n1,r2,c2,n2]` (1-index; Case A/B 배치 규칙)
+7. **Docs SSOT**:
+   - `docs/01-problem-definition.md`
+   - `docs/03-acceptance-criteria.md`
+   - `docs/04-dual-track-clean-architecture-design.md`
+8. **Domain RED order**: D-F05 → D-F03 → D-F06 → D-F01 → D-H04 → D-H01

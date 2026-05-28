@@ -171,7 +171,8 @@ To-do: confirm-purpose, step6-framing, acceptance-criteria
 
 ## Prompt-E — Report & Transcript Export
 
-**출처:** Turn 9, Turn 12
+**출처:** Turn 9, Turn 12, Turn 19, Turn 22  
+**목적:** 진행 보고서 + 대화 transcript + 프롬프트 인덱스 일괄 갱신
 
 ```markdown
 다음 순서로 실행해줘.
@@ -180,6 +181,12 @@ To-do: confirm-purpose, step6-framing, acceptance-criteria
    - Turn별 User/Assistant 요약
    - 실행용 프롬프트 index 반영
    - GitHub PAT 등 보안 정보 제외
+```
+
+**단축형 (Turn 22):**
+
+```markdown
+보고서 내보내주는 것과 프롬프트 저장
 ```
 
 ---
@@ -191,6 +198,7 @@ Prompt-C (문제정의)
   → Prompt-D (문서화 docs/01~03)
   → Prompt-B (Clean Architecture docs/04)
   → Prompt-A′ / Prompt-F (TDD 설계 docs/05)
+  → Cursor Rules (.cursorrules → .cursor/rules/*.mdc)
   → Prompt-E (Report + Transcript Export)
   → [구현] Domain RED (D-F05 → D-H01)
 ```
@@ -201,6 +209,6 @@ Prompt-C (문제정의)
 
 | 파일 | 설명 |
 |---|---|
-| [00-dialogue-transcript-export.md](00-dialogue-transcript-export.md) | Turn별 대화 전체 |
+| [00-dialogue-transcript-export.md](00-dialogue-transcript-export.md) | Turn 1~22 대화 전체 |
 | [../Report/00-project-progress-report.md](../Report/00-project-progress-report.md) | 진행 보고서 |
 | [../docs/](../docs/) | 설계 산출물 |
