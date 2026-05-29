@@ -31,7 +31,7 @@ GREEN 완료 후 즉시 적용.
 
 #### 테스트 코드
 
-- [x] **GM-04:** `test_golden_master_magic_square` 작성 — `tests/golden_master/test_golden_master_magic_square.py`
+- [x] **GM-04:** `test_golden_master_magic_square` 작성 — `tests/test_gm_01_magic_square_golden_master.py`
 - [x] **GM-05:** approve 패턴 적용 — `GM_APPROVE=1`, `assert_matches_expected`, `assert_section_matches`
 - [x] **GM-06:** Golden Master 테스트 PASS 확인 — `pytest -m golden_master -v` → 16 passed
 
