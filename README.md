@@ -58,6 +58,10 @@ Start-Process htmlcov\index.html
 | [Report/](Report/) | [10.refactor-plan-ecb-solve-facade-ui-boundary_Report.md](Report/10.refactor-plan-ecb-solve-facade-ui-boundary_Report.md) | ECB·REFACTOR 계획 — solve_facade / ui_boundary 분석 |
 | [Report/](Report/) | [11.refactor-boundary-submit-extract-method_Report.md](Report/11.refactor-boundary-submit-extract-method_Report.md) | REFACTOR P0-3 — `UIBoundary.submit` Extract Method |
 | [Report/](Report/) | [12.qa-dual-track-coverage-analysis_Report.md](Report/12.qa-dual-track-coverage-analysis_Report.md) | QA Dual-Track 커버리지 분석 (NFR gate) |
+| [Report/](Report/) | [17.MagicSquare_RefactorWaveExport_Report.md](Report/17.MagicSquare_RefactorWaveExport_Report.md) | REFACTOR 웨이브 Export (RPT-MS-017, Step 0 실측) |
+| [Report/](Report/) | [18.MagicSquare_Session_Summary_Report.md](Report/18.MagicSquare_Session_Summary_Report.md) | Session Summary Report/10~17 (RPT-MS-018) |
+| [Prompting/](Prompting/) | [17.MagicSquare_RefactorWaveExport_Prompt_Transcript.md](Prompting/17.MagicSquare_RefactorWaveExport_Prompt_Transcript.md) | 세션 17 Transcript (웨이브 Export) |
+| [Prompting/](Prompting/) | [18.MagicSquare_Session_Summary_Prompt_Transcript.md](Prompting/18.MagicSquare_Session_Summary_Prompt_Transcript.md) | 세션 18 Transcript (Session Summary) |
 | [Prompt/](Prompt/) | [00-dialogue-transcript-export.md](Prompt/00-dialogue-transcript-export.md) | 대화형 Transcript Export |
 | [Prompt/](Prompt/) | [03.qa-defect-list-ac-fr-01-01_Prompt.md](Prompt/03.qa-defect-list-ac-fr-01-01_Prompt.md) | 세션 03 Transcript Export |
 | [Prompt/](Prompt/) | [04.dual-track-red-design-fr01-05_Prompt.md](Prompt/04.dual-track-red-design-fr01-05_Prompt.md) | 세션 04 Transcript Export |
