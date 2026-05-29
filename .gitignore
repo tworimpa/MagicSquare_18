@@ -1,0 +1,44 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+.env/
+.veev/
+.veenv/
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+
+# Packaging / editable install
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Secrets (never commit)
+.env
+.env.*
+!.env.example
+
+# Local logs / temp
+*.log
+.cache/
