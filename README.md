@@ -56,6 +56,7 @@ Start-Process htmlcov\index.html
 | [Report/](Report/) | [08.golden-master-gm01-gm02_Report.md](Report/08.golden-master-gm01-gm02_Report.md) | Golden Master GM-1 baseline·GM-2 회귀 테스트 |
 | [Report/](Report/) | [09.golden-master-gm03-runbook_Report.md](Report/09.golden-master-gm03-runbook_Report.md) | GM-3 docs·test_gm_01 진입점·pytest 실행 정비 |
 | [Report/](Report/) | [10.refactor-plan-ecb-solve-facade-ui-boundary_Report.md](Report/10.refactor-plan-ecb-solve-facade-ui-boundary_Report.md) | ECB·REFACTOR 계획 — solve_facade / ui_boundary 분석 |
+| [Report/](Report/) | [11.refactor-boundary-submit-extract-method_Report.md](Report/11.refactor-boundary-submit-extract-method_Report.md) | REFACTOR P0-3 — `UIBoundary.submit` Extract Method |
 | [Prompt/](Prompt/) | [00-dialogue-transcript-export.md](Prompt/00-dialogue-transcript-export.md) | 대화형 Transcript Export |
 | [Prompt/](Prompt/) | [03.qa-defect-list-ac-fr-01-01_Prompt.md](Prompt/03.qa-defect-list-ac-fr-01-01_Prompt.md) | 세션 03 Transcript Export |
 | [Prompt/](Prompt/) | [04.dual-track-red-design-fr01-05_Prompt.md](Prompt/04.dual-track-red-design-fr01-05_Prompt.md) | 세션 04 Transcript Export |
@@ -65,6 +66,7 @@ Start-Process htmlcov\index.html
 | [Prompt/](Prompt/) | [08.golden-master-gm01-gm02_Prompt.md](Prompt/08.golden-master-gm01-gm02_Prompt.md) | 세션 08 Transcript Export (GM-1·GM-2) |
 | [Prompt/](Prompt/) | [09.golden-master-gm03-runbook_Prompt.md](Prompt/09.golden-master-gm03-runbook_Prompt.md) | 세션 09 Transcript Export (GM-3·실행 정비) |
 | [Prompt/](Prompt/) | [10.refactor-plan-ecb-solve-facade-ui-boundary_Prompt.md](Prompt/10.refactor-plan-ecb-solve-facade-ui-boundary_Prompt.md) | 세션 10 Transcript Export (ECB·REFACTOR 계획) |
+| [Prompt/](Prompt/) | [11.refactor-boundary-submit-extract-method_Prompt.md](Prompt/11.refactor-boundary-submit-extract-method_Prompt.md) | 세션 11 Transcript Export (submit Extract Method) |
 | [Prompt/](Prompt/) | [01-executable-prompts-index.md](Prompt/01-executable-prompts-index.md) | 재실행용 프롬프트 모음 |
 
 ## GREEN 진행 (Track A — FR-01)
@@ -95,7 +97,18 @@ Start-Process htmlcov\index.html
 
 **최근 pytest:** `88 passed` · `python -m pytest tests/test_gm_01_magic_square_golden_master.py -v`
 
-> **TDD 분리:** `red(C-03~C-12)` = tests/ 배선만 · `green(C-0X)` = src/ 최소 구현만
+## REFACTOR 진행 (Report/10 P0)
+
+> SSOT: [Report/10.refactor-plan-ecb-solve-facade-ui-boundary_Report.md](Report/10.refactor-plan-ecb-solve-facade-ui-boundary_Report.md) · semantic-preserving only · GM-1 matched 필수
+
+| Commit | ID | 상태 |
+|---|---|---|
+| **RF-01** | P0-3 — `UIBoundary.submit` Extract Method | ✅ REFACTOR — `ui_boundary.py` 3 private helpers (`a1122aa`) |
+| **RF-02** | P0-1 — `tests/control/test_solve_facade.py` | ⬜ 대기 — Control 회귀 테스트 선행 |
+| **RF-03** | P0-2 — `SolveFacade` ECB 역전 제거 | ⬜ 대기 — RF-02 GREEN 후 |
+| **RF-04** | P0-4 — `UnsolvableDomainError`만 E006 | ⬜ 대기 — Boundary 테스트 보강 후 |
+
+> **TDD 분리:** `red(C-03~C-12)` = tests/ 배선만 · `green(C-0X)` = src/ 최소 구현만 · `refactor(RF-0X)` = behavior 불변 구조 개선만
 
 ## AC-FR-01-01 체크리스트 (Test Plan BV 기준)
 
@@ -130,6 +143,7 @@ Start-Process htmlcov\index.html
 
 ## 다음 단계
 
-1. Domain 커버리지 95%+ (anti-diagonal·Case A 경로)
-2. IT-F01/02 — `SOLVE_IMPOSSIBLE`·Repository (Post-MVP)
-3. REFACTOR — `solve_facade` vs `domain_solver` 정리
+1. REFACTOR RF-02 — `tests/control/test_solve_facade.py` RED→GREEN ([Report/11](Report/11.refactor-boundary-submit-extract-method_Report.md))
+2. REFACTOR RF-03 — `SolveFacade`에서 `UIBoundary` 의존 제거
+3. Domain 커버리지 95%+ (anti-diagonal·Case A 경로)
+4. IT-F01/02 — `SOLVE_IMPOSSIBLE`·Repository (Post-MVP)
