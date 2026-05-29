@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from magicsquare.entity.constants import (
+    EMPTY_CELL_VALUE,
     GRID_SIZE,
     MAGIC_CONSTANT,
     MAX_CELL_VALUE,
@@ -33,6 +34,8 @@ def is_magic_square(matrix: Matrix4x4) -> bool:
         마방진이면 ``True``.
     """
     flat = [cell for row in matrix for cell in row]
+    if EMPTY_CELL_VALUE in flat:
+        return False
     if len(set(flat)) != GRID_SIZE * GRID_SIZE:
         return False
     if set(flat) != set(range(MIN_CELL_VALUE, MAX_CELL_VALUE + 1)):
