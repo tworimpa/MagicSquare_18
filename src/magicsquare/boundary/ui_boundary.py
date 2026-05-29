@@ -56,19 +56,38 @@ class UIBoundary:
         Returns:
             SuccessResponse 또는 ErrorResponse.
         """
-        input_error = validate_input_contract(matrix)
+        input_error = self._validate_input_or_error(matrix)
         if input_error is not None:
-            return ErrorMapper.to_error_response(input_error)
+            return input_error
 
         assert matrix is not None
+        solve_result = self._solve_matrix(matrix)
+        if isinstance(solve_result, ErrorResponse):
+            return solve_result
+
+        return self._to_success_or_internal_error(solve_result)
+
+    def _validate_input_or_error(
+        self,
+        matrix: Matrix4x4 | None,
+    ) -> ErrorResponse | None:
+        """입력 계약 검증 실패 시 ErrorResponse, 통과 시 None."""
+        input_error = validate_input_contract(matrix)
+        if input_error is None:
+            return None
+        return ErrorMapper.to_error_response(input_error)
+
+    def _solve_matrix(self, matrix: Matrix4x4) -> Solution6 | ErrorResponse:
+        """Domain solver 호출 및 예외→ErrorResponse 매핑."""
         try:
-            result = self._solver.solve(matrix)
+            return self._solver.solve(matrix)
         except DomainValidationError:
             return ErrorMapper.to_error_response(ErrorCode.SOLVE_IMPOSSIBLE)
         except Exception:
             return ErrorMapper.to_error_response(ErrorCode.INTERNAL_ERROR)
 
+    def _to_success_or_internal_error(self, result: Solution6) -> BoundaryResponse:
+        """Solution6 출력 검증 후 SuccessResponse 또는 INTERNAL_ERROR."""
         if not validate_output_format(result):
             return ErrorMapper.to_error_response(ErrorCode.INTERNAL_ERROR)
-
         return SuccessResponse(result=result)
