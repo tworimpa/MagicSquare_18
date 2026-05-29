@@ -4,13 +4,32 @@ from __future__ import annotations
 
 import pytest
 
-from magicsquare.entity.solve_partial_magic_square import solution
+from magicsquare.entity.solve_partial_magic_square import (
+    UnsolvableDomainError,
+    solution,
+)
 
 GRID_G1: list[list[int]] = [
     [16, 3, 2, 13],
     [5, 0, 11, 8],
     [9, 6, 0, 12],
     [4, 15, 14, 1],
+]
+
+# Case A fails, Case B succeeds — blanks (1,1),(2,3); missing {11,16}
+GRID_G2: list[list[int]] = [
+    [0, 3, 2, 13],
+    [5, 10, 0, 8],
+    [9, 6, 7, 12],
+    [4, 15, 14, 1],
+]
+
+# Both cases fail → UnsolvableDomainError — blanks (1,1),(1,2); missing {1,2}
+GRID_G3: list[list[int]] = [
+    [0, 0, 3, 4],
+    [5, 6, 7, 8],
+    [9, 10, 11, 12],
+    [13, 14, 15, 16],
 ]
 
 
@@ -29,19 +48,29 @@ class TestDSol01CaseASuccess:
 
 
 class TestDSol02CaseBSuccess:
-    """D-SOL-02 — G2 Case B after A fails (TBD)."""
+    """D-SOL-02 — G2 Case B after A fails."""
 
-    @pytest.mark.skip(reason="G2 grid not fixed — Report/04 placeholder")
     def test_d_sol_02_g2_case_b_success(self) -> None:
-        pytest.fail("RED: D-SOL-02 — G2 TBD; Case B success after A fails")
+        # Given
+        matrix = [row[:] for row in GRID_G2]
+
+        # When
+        result = solution(matrix)
+
+        # Then — Case B: larger(16)→first blank, smaller(11)→second
+        assert result == [1, 1, 16, 2, 3, 11]
 
 
 class TestDSol03Unsolvable:
-    """D-SOL-03 — G3 both cases fail (TBD)."""
+    """D-SOL-03 — G3 both cases fail."""
 
-    @pytest.mark.skip(reason="G3 grid not fixed — Report/04 placeholder")
     def test_d_sol_03_g3_unsolvable_domain_error(self) -> None:
-        pytest.fail("RED: D-SOL-03 — G3 TBD; UnsolvableDomainError")
+        # Given
+        matrix = [row[:] for row in GRID_G3]
+
+        # When / Then
+        with pytest.raises(UnsolvableDomainError):
+            solution(matrix)
 
 
 class TestDSol04OutputFormat:
