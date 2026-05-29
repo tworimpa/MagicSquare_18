@@ -82,8 +82,9 @@ Start-Process htmlcov\index.html
 | **C-13** | D-SOL-02/03 | ✅ GREEN — G2 Case B, G3 unsolvable (src 검증만) |
 | **C-14** | U-IN-09/10 | ✅ GREEN — duplicate·17 (src 검증만) |
 | **C-15** | IT-OK01 | ✅ GREEN — `DomainPartialMagicSquareSolver` |
+| **GM-1** | Golden Master | ✅ `tests/golden_master_expected.txt` (5 scenarios) |
 
-**최근 pytest:** `72 passed` / `0 skipped` (RED skeleton 27건 + AC 13건 + integration 1건)
+**최근 pytest:** `83 passed` (72 + GM-1 11) · `docs/golden-master-design.md`
 
 > **TDD 분리:** `red(C-03~C-12)` = tests/ 배선만 · `green(C-0X)` = src/ 최소 구현만
 
