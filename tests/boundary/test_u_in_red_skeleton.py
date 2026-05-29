@@ -1,12 +1,10 @@
 """Track A — U-IN-04~08 (Report/04).
 
 U-IN-01~03: `test_ac_fr_01_01_red.py` — duplicate forbidden.
-U-IN-04~06: GREEN (C-01~02). U-IN-07~08: RED skeleton.
+U-IN-04~08: GREEN (C-01~03).
 """
 
 from __future__ import annotations
-
-import pytest
 
 from magicsquare.boundary.error_codes import ErrorCode
 from magicsquare.boundary.input_validator import validate_input_contract
@@ -86,9 +84,19 @@ class TestUIn07ThreeEmptyCells:
 
 
 class TestUIn08NegativeCell:
-    """U-IN-08 — cell -1 with exactly 2 zeros → E004."""
+    """U-IN-08 — cell -1 with exactly 2 zeros → INPUT_VALUE_RANGE."""
 
     def test_u_in_08_negative_cell_returns_e004(self) -> None:
         # Given — 4×4, 2 zeros, one cell -1
-        # When — validate_input_contract(matrix) after size+empty pass
-        pytest.fail("RED: U-IN-08 — -1 → E004 INPUT_VALUE_RANGE")
+        matrix = [
+            [0, 3, 2, 13],
+            [5, 10, -1, 8],
+            [9, 6, 7, 12],
+            [4, 15, 14, 0],
+        ]
+
+        # When
+        result = validate_input_contract(matrix)
+
+        # Then
+        assert result is ErrorCode.INPUT_VALUE_RANGE
