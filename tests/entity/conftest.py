@@ -24,11 +24,21 @@ from __future__ import annotations
 #     [4, 15, 14, 1],
 # ]
 
-# G2 — Case A fail, Case B success (TBD — Report/02 appendix)
-# GRID_G2: list[list[int]] | None = None
+# G2 — Case A fail, Case B success; blanks (1,1),(2,3); missing {11,16}
+GRID_G2: list[list[int]] = [
+    [0, 3, 2, 13],
+    [5, 10, 0, 8],
+    [9, 6, 7, 12],
+    [4, 15, 14, 1],
+]
 
-# G3 — both Case A/B fail → UnsolvableDomainError (TBD)
-# GRID_G3: list[list[int]] | None = None
+# G3 — both Case A/B fail; blanks (1,1),(1,2); missing {1,2}
+GRID_G3: list[list[int]] = [
+    [0, 0, 3, 4],
+    [5, 6, 7, 8],
+    [9, 10, 11, 12],
+    [13, 14, 15, 16],
+]
 
 # @pytest.fixture
 # def grid_g0() -> list[list[int]]:

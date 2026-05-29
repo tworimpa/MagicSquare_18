@@ -52,12 +52,14 @@ Start-Process htmlcov\index.html
 | [Report/](Report/) | [05.red-skeleton-pytest-cov_Report.md](Report/05.red-skeleton-pytest-cov_Report.md) | RED Skeleton 25건·pytest-cov 세션 |
 | [Report/](Report/) | [06.ac-fr-01-01-green-null-grid_Report.md](Report/06.ac-fr-01-01-green-null-grid_Report.md) | AC-FR-01-01 GREEN (grid=None) 세션 |
 | [Report/](Report/) | [07.pytest-html-reports_Report.md](Report/07.pytest-html-reports_Report.md) | pytest HTML 테스트·커버리지 리포트 자동 생성 |
+| [Report/](Report/) | [08.golden-master-gm01-gm02_Report.md](Report/08.golden-master-gm01-gm02_Report.md) | Golden Master GM-1 baseline·GM-2 회귀 테스트 |
 | [Prompt/](Prompt/) | [00-dialogue-transcript-export.md](Prompt/00-dialogue-transcript-export.md) | 대화형 Transcript Export |
 | [Prompt/](Prompt/) | [03.qa-defect-list-ac-fr-01-01_Prompt.md](Prompt/03.qa-defect-list-ac-fr-01-01_Prompt.md) | 세션 03 Transcript Export |
 | [Prompt/](Prompt/) | [04.dual-track-red-design-fr01-05_Prompt.md](Prompt/04.dual-track-red-design-fr01-05_Prompt.md) | 세션 04 Transcript Export |
 | [Prompt/](Prompt/) | [05.red-skeleton-pytest-cov_Prompt.md](Prompt/05.red-skeleton-pytest-cov_Prompt.md) | 세션 05 Transcript Export |
 | [Prompt/](Prompt/) | [06.ac-fr-01-01-green-null-grid_Prompt.md](Prompt/06.ac-fr-01-01-green-null-grid_Prompt.md) | 세션 06 Transcript Export |
 | [Prompt/](Prompt/) | [07.pytest-html-reports_Prompt.md](Prompt/07.pytest-html-reports_Prompt.md) | 세션 07 Transcript Export |
+| [Prompt/](Prompt/) | [08.golden-master-gm01-gm02_Prompt.md](Prompt/08.golden-master-gm01-gm02_Prompt.md) | 세션 08 Transcript Export (GM-1·GM-2) |
 | [Prompt/](Prompt/) | [01-executable-prompts-index.md](Prompt/01-executable-prompts-index.md) | 재실행용 프롬프트 모음 |
 
 ## GREEN 진행 (Track A — FR-01)
@@ -67,12 +69,27 @@ Start-Process htmlcov\index.html
 | Commit | Test ID | 상태 |
 |---|---|---|
 | **C-00** | U-C02, U-IN-01~03 (null·size) | ✅ GREEN — `test_ac_fr_01_01_red.py` 9건, `test_input_validator` U-C02 |
-| C-01 | U-IN-04, U-IN-05 | 🔴 RED skeleton |
-| C-02 | U-IN-06, U-IN-07 | 🔴 RED skeleton |
-| C-03 | U-IN-08 | 🔴 RED skeleton |
-| C-04~06 | U-FLOW-02*, U-OUT-01~03 | 🔴 RED skeleton |
+| **C-01** | U-IN-04, U-IN-05 | ✅ GREEN — 4×3 `INPUT_COL_COUNT`, 5×5 `INPUT_ROW_COUNT` |
+| **C-02** | U-IN-06, U-IN-07 | ✅ GREEN — G0/G1 empty count → `INPUT_EMPTY_COUNT` |
+| **C-03** | U-IN-08 | ✅ GREEN — `input_validator` value range (검증만, src 무변경) |
+| **C-04** | U-FLOW-02a/b | ✅ GREEN — null·size zero-call (검증만) |
+| **C-05** | U-FLOW-02c-e | ✅ GREEN — empty·value·dup zero-call (검증만) |
+| **C-06** | U-OUT-01~03 | ✅ GREEN — output contract (검증만) |
+| **C-07** | D-LOC-01 | ✅ GREEN — `find_blank_coords` |
+| **C-08** | D-MIS-01 | ✅ GREEN — `find_not_exist_nums` |
+| **C-09** | D-VAL-02/04 | ✅ GREEN — row·주대각 |
+| **C-10** | D-VAL-01/03 | ✅ GREEN — G0 true·열 합 |
+| **C-11** | D-VAL-05/06 | ✅ GREEN — 0 셀 거부 |
+| **C-12** | D-SOL-01/04 | ✅ GREEN — G1 Case B |
+| **C-13** | D-SOL-02/03 | ✅ GREEN — G2 Case B, G3 unsolvable (src 검증만) |
+| **C-14** | U-IN-09/10 | ✅ GREEN — duplicate·17 (src 검증만) |
+| **C-15** | IT-OK01 | ✅ GREEN — `DomainPartialMagicSquareSolver` |
+| **GM-1** | Golden Master | ✅ `tests/golden_master_expected.txt` (5 scenarios) |
+| **GM-2** | Golden Master tests | ✅ `test_golden_master_magic_square.py` (16건) |
 
-**최근 pytest:** `44 passed` / `25 failed` (실패 25건 = RED skeleton `pytest.fail`)
+**최근 pytest:** `88 passed` · `pytest -m golden_master -v` · `docs/golden-master-design.md`
+
+> **TDD 분리:** `red(C-03~C-12)` = tests/ 배선만 · `green(C-0X)` = src/ 최소 구현만
 
 ## AC-FR-01-01 체크리스트 (Test Plan BV 기준)
 
@@ -94,7 +111,7 @@ Start-Process htmlcov\index.html
 - [x] TC-B-04: AC-FR-01-02~05 전용 케이스 모듈 미포함
 
 ### 커버리지 목표
-- [ ] Domain Logic: 95%+
+- [ ] Domain Logic: 95%+ (현재 ~89%, `htmlcov/index.html`)
 - [x] Boundary Layer: 85%+ (현재 ~90%+, `htmlcov/index.html` 참고)
 - [x] 전체 TOTAL: 90%+ (현재 ~92%)
 
@@ -103,10 +120,10 @@ Start-Process htmlcov\index.html
 - [x] DEF-001~005: 테스트 SSOT 정렬 (C-00)
 - [x] DEF-006: README `INPUT_*` 반영 (본 갱신)
 - [x] DEF-007: `test_ac_fr_01_01_red.py` docstring SSOT 정렬 (C-00)
-- [ ] RED skeleton 25건 GREEN 후 전체 `69 passed` 달성
+- [x] RED skeleton 27건 GREEN 완료 — 전체 `72 passed`
 
 ## 다음 단계
 
-1. **C-01** — U-IN-04/05 (4×3, 5×5) skeleton → assert 교체
-2. Domain RED 순서(D-F05 → D-H01): `PartialGrid4x4` · `MagicSquareValidator`
-3. 브랜치 `stabilize/green` — [PR #5](https://github.com/tworimpa/MagicSquare_18/pull/5)
+1. Domain 커버리지 95%+ (anti-diagonal·Case A 경로)
+2. IT-F01/02 — `SOLVE_IMPOSSIBLE`·Repository (Post-MVP)
+3. REFACTOR — `solve_facade` vs `domain_solver` 정리
