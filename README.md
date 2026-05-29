@@ -78,9 +78,12 @@ Start-Process htmlcov\index.html
 | **C-09** | D-VAL-02/04 | ✅ GREEN — row·주대각 |
 | **C-10** | D-VAL-01/03 | ✅ GREEN — G0 true·열 합 |
 | **C-11** | D-VAL-05/06 | ✅ GREEN — 0 셀 거부 |
-| **C-12** | D-SOL-01/04 | ✅ GREEN — G1 Case B; D-SOL-02/03 skip |
+| **C-12** | D-SOL-01/04 | ✅ GREEN — G1 Case B |
+| **C-13** | D-SOL-02/03 | ✅ GREEN — G2 Case B, G3 unsolvable (src 검증만) |
+| **C-14** | U-IN-09/10 | ✅ GREEN — duplicate·17 (src 검증만) |
+| **C-15** | IT-OK01 | ✅ GREEN — `DomainPartialMagicSquareSolver` |
 
-**최근 pytest:** `67 passed` / `2 skipped` (D-SOL-02/03 — G2/G3 TBD)
+**최근 pytest:** `72 passed` / `0 skipped` (RED skeleton 27건 + AC 13건 + integration 1건)
 
 > **TDD 분리:** `red(C-03~C-12)` = tests/ 배선만 · `green(C-0X)` = src/ 최소 구현만
 
@@ -104,7 +107,7 @@ Start-Process htmlcov\index.html
 - [x] TC-B-04: AC-FR-01-02~05 전용 케이스 모듈 미포함
 
 ### 커버리지 목표
-- [ ] Domain Logic: 95%+
+- [ ] Domain Logic: 95%+ (현재 ~89%, `htmlcov/index.html`)
 - [x] Boundary Layer: 85%+ (현재 ~90%+, `htmlcov/index.html` 참고)
 - [x] 전체 TOTAL: 90%+ (현재 ~92%)
 
@@ -113,10 +116,10 @@ Start-Process htmlcov\index.html
 - [x] DEF-001~005: 테스트 SSOT 정렬 (C-00)
 - [x] DEF-006: README `INPUT_*` 반영 (본 갱신)
 - [x] DEF-007: `test_ac_fr_01_01_red.py` docstring SSOT 정렬 (C-00)
-- [ ] RED skeleton 25건 GREEN 후 전체 `69 passed` 달성
+- [x] RED skeleton 27건 GREEN 완료 — 전체 `72 passed`
 
 ## 다음 단계
 
-1. **C-03** — U-IN-08 (value range) skeleton → assert 교체
-2. Domain RED 순서(D-F05 → D-H01): `PartialGrid4x4` · `MagicSquareValidator`
-3. 브랜치 `stabilize/green` — [PR #5](https://github.com/tworimpa/MagicSquare_18/pull/5)
+1. Domain 커버리지 95%+ (anti-diagonal·Case A 경로)
+2. IT-F01/02 — `SOLVE_IMPOSSIBLE`·Repository (Post-MVP)
+3. REFACTOR — `solve_facade` vs `domain_solver` 정리

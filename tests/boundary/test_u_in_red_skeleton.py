@@ -1,7 +1,7 @@
-"""Track A — U-IN-04~08 (Report/04).
+"""Track A — U-IN-04~10 (Report/04).
 
 U-IN-01~03: `test_ac_fr_01_01_red.py` — duplicate forbidden.
-U-IN-04~08: GREEN (C-01~03).
+U-IN-04~10: wired in RED; Boundary GREEN verified C-03~06, C-14.
 """
 
 from __future__ import annotations
@@ -91,44 +91,6 @@ class TestUIn08NegativeCell:
         matrix = [
             [0, 3, 2, 13],
             [5, 10, -1, 8],
-            [9, 6, 7, 12],
-            [4, 15, 14, 0],
-        ]
-
-        # When
-        result = validate_input_contract(matrix)
-
-        # Then
-        assert result is ErrorCode.INPUT_VALUE_RANGE
-
-
-class TestUIn09DuplicateNonZero:
-    """U-IN-09 — duplicate non-zero with 2 zeros → INPUT_DUPLICATE."""
-
-    def test_u_in_09_duplicate_non_zero_returns_e005(self) -> None:
-        # Given — 4×4, 2 zeros, duplicate 5
-        matrix = [
-            [16, 3, 2, 0],
-            [5, 10, 5, 8],
-            [9, 6, 7, 12],
-            [4, 15, 14, 0],
-        ]
-
-        # When
-        result = validate_input_contract(matrix)
-
-        # Then
-        assert result is ErrorCode.INPUT_DUPLICATE
-
-
-class TestUIn10SeventeenCell:
-    """U-IN-10 — cell 17 with 2 zeros → INPUT_VALUE_RANGE."""
-
-    def test_u_in_10_seventeen_cell_returns_e004(self) -> None:
-        # Given — 4×4, 2 zeros, one cell 17
-        matrix = [
-            [16, 3, 2, 13],
-            [5, 10, 17, 8],
             [9, 6, 7, 12],
             [4, 15, 14, 0],
         ]
