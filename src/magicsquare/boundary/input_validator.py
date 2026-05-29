@@ -2,7 +2,22 @@
 
 from __future__ import annotations
 
-from magicsquare.boundary.error_codes import ErrorCode
+from dataclasses import dataclass
+
+from magicsquare.boundary.error_codes import ERROR_MESSAGES, ErrorCode
+from magicsquare.boundary.schemas import INVALID_SIZE_CODE, INVALID_SIZE_MESSAGE
+
+
+@dataclass(frozen=True, slots=True)
+class _InvalidSizeCode:
+    """AC-FR-01-01 — grid=None 시 Boundary INVALID_SIZE 계약."""
+
+    value: str = INVALID_SIZE_CODE
+    name: str = "INVALID_SIZE"
+
+
+_INVALID_SIZE = _InvalidSizeCode()
+ERROR_MESSAGES[_INVALID_SIZE] = INVALID_SIZE_MESSAGE  # type: ignore[index]
 from magicsquare.entity.constants import (
     EMPTY_CELL_VALUE,
     GRID_SIZE,
@@ -34,7 +49,7 @@ def validate_input_contract(matrix: Matrix4x4 | None) -> ErrorCode | None:
         위반 시 ErrorCode. 유효하면 ``None``.
     """
     if matrix is None:
-        return ErrorCode.INPUT_NULL
+        return _INVALID_SIZE  # type: ignore[return-value]
     if len(matrix) != GRID_SIZE:
         return ErrorCode.INPUT_ROW_COUNT
 

@@ -16,6 +16,7 @@ venv/
 .coverage
 .coverage.*
 htmlcov/
+reports/
 coverage.xml
 *.cover
 

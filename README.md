@@ -26,10 +26,14 @@
 | [Report/](Report/) | [03.qa-defect-list-ac-fr-01-01_Report.md](Report/03.qa-defect-list-ac-fr-01-01_Report.md) | QA 결함 분석·defect_list 세션 보고 |
 | [Report/](Report/) | [04.dual-track-red-design-fr01-05_Report.md](Report/04.dual-track-red-design-fr01-05_Report.md) | FR-01~FR-05 Dual-Track RED 설계표 세션 |
 | [Report/](Report/) | [05.red-skeleton-pytest-cov_Report.md](Report/05.red-skeleton-pytest-cov_Report.md) | RED Skeleton 25건·pytest-cov 세션 |
+| [Report/](Report/) | [06.ac-fr-01-01-green-null-grid_Report.md](Report/06.ac-fr-01-01-green-null-grid_Report.md) | AC-FR-01-01 GREEN (grid=None) 세션 |
+| [Report/](Report/) | [07.pytest-html-reports_Report.md](Report/07.pytest-html-reports_Report.md) | pytest HTML 테스트·커버리지 리포트 자동 생성 |
 | [Prompt/](Prompt/) | [00-dialogue-transcript-export.md](Prompt/00-dialogue-transcript-export.md) | 대화형 Transcript Export |
 | [Prompt/](Prompt/) | [03.qa-defect-list-ac-fr-01-01_Prompt.md](Prompt/03.qa-defect-list-ac-fr-01-01_Prompt.md) | 세션 03 Transcript Export |
 | [Prompt/](Prompt/) | [04.dual-track-red-design-fr01-05_Prompt.md](Prompt/04.dual-track-red-design-fr01-05_Prompt.md) | 세션 04 Transcript Export |
 | [Prompt/](Prompt/) | [05.red-skeleton-pytest-cov_Prompt.md](Prompt/05.red-skeleton-pytest-cov_Prompt.md) | 세션 05 Transcript Export |
+| [Prompt/](Prompt/) | [06.ac-fr-01-01-green-null-grid_Prompt.md](Prompt/06.ac-fr-01-01-green-null-grid_Prompt.md) | 세션 06 Transcript Export |
+| [Prompt/](Prompt/) | [07.pytest-html-reports_Prompt.md](Prompt/07.pytest-html-reports_Prompt.md) | 세션 07 Transcript Export |
 | [Prompt/](Prompt/) | [01-executable-prompts-index.md](Prompt/01-executable-prompts-index.md) | 재실행용 프롬프트 모음 |
 
 ## RED 단계 To-Do 리스트
