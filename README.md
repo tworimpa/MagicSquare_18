@@ -52,12 +52,14 @@ Start-Process htmlcov\index.html
 | [Report/](Report/) | [05.red-skeleton-pytest-cov_Report.md](Report/05.red-skeleton-pytest-cov_Report.md) | RED Skeleton 25건·pytest-cov 세션 |
 | [Report/](Report/) | [06.ac-fr-01-01-green-null-grid_Report.md](Report/06.ac-fr-01-01-green-null-grid_Report.md) | AC-FR-01-01 GREEN (grid=None) 세션 |
 | [Report/](Report/) | [07.pytest-html-reports_Report.md](Report/07.pytest-html-reports_Report.md) | pytest HTML 테스트·커버리지 리포트 자동 생성 |
+| [Report/](Report/) | [08.golden-master-gm01-gm02_Report.md](Report/08.golden-master-gm01-gm02_Report.md) | Golden Master GM-1 baseline·GM-2 회귀 테스트 |
 | [Prompt/](Prompt/) | [00-dialogue-transcript-export.md](Prompt/00-dialogue-transcript-export.md) | 대화형 Transcript Export |
 | [Prompt/](Prompt/) | [03.qa-defect-list-ac-fr-01-01_Prompt.md](Prompt/03.qa-defect-list-ac-fr-01-01_Prompt.md) | 세션 03 Transcript Export |
 | [Prompt/](Prompt/) | [04.dual-track-red-design-fr01-05_Prompt.md](Prompt/04.dual-track-red-design-fr01-05_Prompt.md) | 세션 04 Transcript Export |
 | [Prompt/](Prompt/) | [05.red-skeleton-pytest-cov_Prompt.md](Prompt/05.red-skeleton-pytest-cov_Prompt.md) | 세션 05 Transcript Export |
 | [Prompt/](Prompt/) | [06.ac-fr-01-01-green-null-grid_Prompt.md](Prompt/06.ac-fr-01-01-green-null-grid_Prompt.md) | 세션 06 Transcript Export |
 | [Prompt/](Prompt/) | [07.pytest-html-reports_Prompt.md](Prompt/07.pytest-html-reports_Prompt.md) | 세션 07 Transcript Export |
+| [Prompt/](Prompt/) | [08.golden-master-gm01-gm02_Prompt.md](Prompt/08.golden-master-gm01-gm02_Prompt.md) | 세션 08 Transcript Export (GM-1·GM-2) |
 | [Prompt/](Prompt/) | [01-executable-prompts-index.md](Prompt/01-executable-prompts-index.md) | 재실행용 프롬프트 모음 |
 
 ## GREEN 진행 (Track A — FR-01)
