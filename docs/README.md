@@ -45,7 +45,9 @@ GREEN 완료 후 즉시 적용.
 **실행**
 
 ```powershell
-python -m pytest -m golden_master -o addopts="" -v
+pip install -e ".[dev]"
+python -m pytest tests/test_gm_01_magic_square_golden_master.py -v
+python -m pytest -m golden_master -v
 python scripts/generate_golden_master.py
 ```
 
