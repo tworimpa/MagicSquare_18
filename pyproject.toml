@@ -11,7 +11,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = ["src", "tests"]
 testpaths = ["tests"]
 markers = [
     "golden_master: GM-1/GM-2 Approval/Golden Master 회귀 테스트",

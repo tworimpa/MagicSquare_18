@@ -1,24 +1,23 @@
-"""GM-2 — Magic Square Solver Golden Master 회귀 테스트.
+"""GM-01/GM-2 — Magic Square Solver Golden Master 회귀 테스트.
 
 실행:
-    pytest -m golden_master -v
-    pytest tests/golden_master/test_golden_master_magic_square.py -v
+    python -m pytest tests/test_gm_01_magic_square_golden_master.py -v
+    python -m pytest -m golden_master -v
 
 baseline 갱신:
-    GM_APPROVE=1 pytest -m golden_master -v
+    $env:GM_APPROVE="1"
+    python -m pytest tests/test_gm_01_magic_square_golden_master.py -v
 """
 
 from __future__ import annotations
 
 import io
-import os
 from contextlib import redirect_stdout
 from pathlib import Path
 
 import pytest
 
-from .harness import (
-    DEFAULT_EXPECTED_PATH,
+from golden_master.harness import (
     GM_TC_ORDER,
     GM_TC_SCENARIOS,
     SCENARIO_GRIDS,
@@ -39,24 +38,6 @@ from .harness import (
 )
 
 pytestmark = pytest.mark.golden_master
-
-EXPECTED_PATH = DEFAULT_EXPECTED_PATH
-
-
-def _approve_mode() -> bool:
-    return os.environ.get("GM_APPROVE", "").lower() in {"1", "true", "yes"}
-
-
-@pytest.fixture(scope="session")
-def golden_master_path() -> Path:
-    """기준 파일 경로."""
-    return EXPECTED_PATH
-
-
-@pytest.fixture(scope="session")
-def approve_mode() -> bool:
-    """GM_APPROVE 환경 변수."""
-    return _approve_mode()
 
 
 class TestGoldenMasterApprove:
