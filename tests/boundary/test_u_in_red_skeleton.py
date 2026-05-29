@@ -100,3 +100,79 @@ class TestUIn08NegativeCell:
 
         # Then
         assert result is ErrorCode.INPUT_VALUE_RANGE
+
+
+class TestUIn09DuplicateNonZero:
+    """U-IN-09 — duplicate non-zero with 2 zeros → INPUT_DUPLICATE."""
+
+    def test_u_in_09_duplicate_non_zero_returns_e005(self) -> None:
+        # Given — 4×4, 2 zeros, duplicate 5
+        matrix = [
+            [16, 3, 2, 0],
+            [5, 10, 5, 8],
+            [9, 6, 7, 12],
+            [4, 15, 14, 0],
+        ]
+
+        # When
+        result = validate_input_contract(matrix)
+
+        # Then
+        assert result is ErrorCode.INPUT_DUPLICATE
+
+
+class TestUIn10SeventeenCell:
+    """U-IN-10 — cell 17 with 2 zeros → INPUT_VALUE_RANGE."""
+
+    def test_u_in_10_seventeen_cell_returns_e004(self) -> None:
+        # Given — 4×4, 2 zeros, one cell 17
+        matrix = [
+            [16, 3, 2, 13],
+            [5, 10, 17, 8],
+            [9, 6, 7, 12],
+            [4, 15, 14, 0],
+        ]
+
+        # When
+        result = validate_input_contract(matrix)
+
+        # Then
+        assert result is ErrorCode.INPUT_VALUE_RANGE
+
+
+class TestUIn09DuplicateNonZero:
+    """U-IN-09 — duplicate non-zero with 2 zeros → INPUT_DUPLICATE."""
+
+    def test_u_in_09_duplicate_non_zero_returns_e005(self) -> None:
+        # Given — 4×4, 2 zeros, duplicate 5
+        matrix = [
+            [16, 3, 2, 0],
+            [5, 10, 5, 8],
+            [9, 6, 7, 12],
+            [4, 15, 14, 0],
+        ]
+
+        # When
+        result = validate_input_contract(matrix)
+
+        # Then
+        assert result is ErrorCode.INPUT_DUPLICATE
+
+
+class TestUIn10SeventeenCell:
+    """U-IN-10 — cell 17 with 2 zeros → INPUT_VALUE_RANGE."""
+
+    def test_u_in_10_seventeen_cell_returns_e004(self) -> None:
+        # Given — 4×4, 2 zeros, one cell 17
+        matrix = [
+            [16, 3, 2, 13],
+            [5, 10, 17, 8],
+            [9, 6, 7, 12],
+            [4, 15, 14, 0],
+        ]
+
+        # When
+        result = validate_input_contract(matrix)
+
+        # Then
+        assert result is ErrorCode.INPUT_VALUE_RANGE
