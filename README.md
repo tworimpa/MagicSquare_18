@@ -57,6 +57,7 @@ Start-Process htmlcov\index.html
 | [Report/](Report/) | [09.golden-master-gm03-runbook_Report.md](Report/09.golden-master-gm03-runbook_Report.md) | GM-3 docs·test_gm_01 진입점·pytest 실행 정비 |
 | [Report/](Report/) | [10.refactor-plan-ecb-solve-facade-ui-boundary_Report.md](Report/10.refactor-plan-ecb-solve-facade-ui-boundary_Report.md) | ECB·REFACTOR 계획 — solve_facade / ui_boundary 분석 |
 | [Report/](Report/) | [11.refactor-boundary-submit-extract-method_Report.md](Report/11.refactor-boundary-submit-extract-method_Report.md) | REFACTOR P0-3 — `UIBoundary.submit` Extract Method |
+| [Report/](Report/) | [12.qa-dual-track-coverage-analysis_Report.md](Report/12.qa-dual-track-coverage-analysis_Report.md) | QA Dual-Track 커버리지 분석 (NFR gate) |
 | [Prompt/](Prompt/) | [00-dialogue-transcript-export.md](Prompt/00-dialogue-transcript-export.md) | 대화형 Transcript Export |
 | [Prompt/](Prompt/) | [03.qa-defect-list-ac-fr-01-01_Prompt.md](Prompt/03.qa-defect-list-ac-fr-01-01_Prompt.md) | 세션 03 Transcript Export |
 | [Prompt/](Prompt/) | [04.dual-track-red-design-fr01-05_Prompt.md](Prompt/04.dual-track-red-design-fr01-05_Prompt.md) | 세션 04 Transcript Export |
@@ -67,6 +68,7 @@ Start-Process htmlcov\index.html
 | [Prompt/](Prompt/) | [09.golden-master-gm03-runbook_Prompt.md](Prompt/09.golden-master-gm03-runbook_Prompt.md) | 세션 09 Transcript Export (GM-3·실행 정비) |
 | [Prompt/](Prompt/) | [10.refactor-plan-ecb-solve-facade-ui-boundary_Prompt.md](Prompt/10.refactor-plan-ecb-solve-facade-ui-boundary_Prompt.md) | 세션 10 Transcript Export (ECB·REFACTOR 계획) |
 | [Prompt/](Prompt/) | [11.refactor-boundary-submit-extract-method_Prompt.md](Prompt/11.refactor-boundary-submit-extract-method_Prompt.md) | 세션 11 Transcript Export (submit Extract Method) |
+| [Prompt/](Prompt/) | [12.qa-dual-track-coverage-analysis_Prompt.md](Prompt/12.qa-dual-track-coverage-analysis_Prompt.md) | 세션 12 Transcript Export (Dual-Track 커버리지) |
 | [Prompt/](Prompt/) | [01-executable-prompts-index.md](Prompt/01-executable-prompts-index.md) | 재실행용 프롬프트 모음 |
 
 ## GREEN 진행 (Track A — FR-01)
@@ -110,6 +112,23 @@ Start-Process htmlcov\index.html
 
 > **TDD 분리:** `red(C-03~C-12)` = tests/ 배선만 · `green(C-0X)` = src/ 최소 구현만 · `refactor(RF-0X)` = behavior 불변 구조 개선만
 
+## QA 커버리지 (Dual-Track — Report/12)
+
+> SSOT: [Report/12.qa-dual-track-coverage-analysis_Report.md](Report/12.qa-dual-track-coverage-analysis_Report.md) · [docs/test_plan.md](docs/test_plan.md) §6·§7 · scoped `--cov` 측정
+
+| Track | NFR | 목표 | 현재 (branch) | Gate |
+|---|---|---|---|---|
+| Entity | NFR-01 | ≥ 95% | **92%** | ❌ — `magic_square_validator`·Case A 갭 |
+| Boundary | NFR-02 | ≥ 85% | **93%** | ✅ — `output_validator` fail branch 잔존 |
+| 전역 | NFR-03 | ≥ 80% | **94%** | ✅ |
+| Control | — | ≥ 80% | 100% (IT-OK01만) | ⚠️ `tests/control/` 미구현 |
+
+```powershell
+# 레이어별 scoped 측정 (pyproject addopts 오염 방지)
+python -m pytest tests/entity/ tests/integration/ --cov=src/magicsquare/entity --cov-report=term-missing --override-ini="addopts="
+python -m pytest tests/boundary/ --cov=src/magicsquare/boundary --cov-report=term-missing --override-ini="addopts="
+```
+
 ## AC-FR-01-01 체크리스트 (Test Plan BV 기준)
 
 > [docs/test_plan.md](docs/test_plan.md) BV-01~06 · `tests/boundary/test_ac_fr_01_01_red.py`
@@ -130,9 +149,9 @@ Start-Process htmlcov\index.html
 - [x] TC-B-04: AC-FR-01-02~05 전용 케이스 모듈 미포함
 
 ### 커버리지 목표
-- [ ] Domain Logic: 95%+ (현재 ~89%, `htmlcov/index.html`)
-- [x] Boundary Layer: 85%+ (현재 ~90%+, `htmlcov/index.html` 참고)
-- [x] 전체 TOTAL: 90%+ (현재 ~92%)
+- [ ] Domain Logic: 95%+ (현재 **92%** scoped entity — [Report/12](Report/12.qa-dual-track-coverage-analysis_Report.md))
+- [x] Boundary Layer: 85%+ (현재 **93%** scoped boundary)
+- [x] 전체 TOTAL: 90%+ (현재 **94%**)
 
 ### 결함 목록
 - [x] [defect_list.md](defect_list.md) 생성 (DEF-001~007)
@@ -144,6 +163,6 @@ Start-Process htmlcov\index.html
 ## 다음 단계
 
 1. REFACTOR RF-02 — `tests/control/test_solve_facade.py` RED→GREEN ([Report/11](Report/11.refactor-boundary-submit-extract-method_Report.md))
-2. REFACTOR RF-03 — `SolveFacade`에서 `UIBoundary` 의존 제거
-3. Domain 커버리지 95%+ (anti-diagonal·Case A 경로)
+2. Entity NFR-01 95% — D-VAL anti-diagonal + D-SOL Case A ([Report/12](Report/12.qa-dual-track-coverage-analysis_Report.md))
+3. REFACTOR RF-03 — `SolveFacade`에서 `UIBoundary` 의존 제거
 4. IT-F01/02 — `SOLVE_IMPOSSIBLE`·Repository (Post-MVP)
