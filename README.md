@@ -69,10 +69,20 @@ Start-Process htmlcov\index.html
 | **C-00** | U-C02, U-IN-01~03 (null·size) | ✅ GREEN — `test_ac_fr_01_01_red.py` 9건, `test_input_validator` U-C02 |
 | **C-01** | U-IN-04, U-IN-05 | ✅ GREEN — 4×3 `INPUT_COL_COUNT`, 5×5 `INPUT_ROW_COUNT` |
 | **C-02** | U-IN-06, U-IN-07 | ✅ GREEN — G0/G1 empty count → `INPUT_EMPTY_COUNT` |
-| C-03 | U-IN-08 | 🔴 RED skeleton |
-| C-04~06 | U-FLOW-02*, U-OUT-01~03 | 🔴 RED skeleton |
+| **C-03** | U-IN-08 | ✅ GREEN — `input_validator` value range (검증만, src 무변경) |
+| **C-04** | U-FLOW-02a/b | ✅ GREEN — null·size zero-call (검증만) |
+| **C-05** | U-FLOW-02c-e | ✅ GREEN — empty·value·dup zero-call (검증만) |
+| **C-06** | U-OUT-01~03 | ✅ GREEN — output contract (검증만) |
+| **C-07** | D-LOC-01 | ✅ GREEN — `find_blank_coords` |
+| **C-08** | D-MIS-01 | ✅ GREEN — `find_not_exist_nums` |
+| **C-09** | D-VAL-02/04 | ✅ GREEN — row·주대각 |
+| **C-10** | D-VAL-01/03 | ✅ GREEN — G0 true·열 합 |
+| **C-11** | D-VAL-05/06 | ✅ GREEN — 0 셀 거부 |
+| **C-12** | D-SOL-01/04 | ✅ GREEN — G1 Case B; D-SOL-02/03 skip |
 
-**최근 pytest:** `48 passed` / `21 failed` (실패 21건 = RED skeleton `pytest.fail`)
+**최근 pytest:** `67 passed` / `2 skipped` (D-SOL-02/03 — G2/G3 TBD)
+
+> **TDD 분리:** `red(C-03~C-12)` = tests/ 배선만 · `green(C-0X)` = src/ 최소 구현만
 
 ## AC-FR-01-01 체크리스트 (Test Plan BV 기준)
 
