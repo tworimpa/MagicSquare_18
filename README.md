@@ -68,11 +68,11 @@ Start-Process htmlcov\index.html
 |---|---|---|
 | **C-00** | U-C02, U-IN-01~03 (null·size) | ✅ GREEN — `test_ac_fr_01_01_red.py` 9건, `test_input_validator` U-C02 |
 | **C-01** | U-IN-04, U-IN-05 | ✅ GREEN — 4×3 `INPUT_COL_COUNT`, 5×5 `INPUT_ROW_COUNT` |
-| C-02 | U-IN-06, U-IN-07 | 🔴 RED skeleton |
+| **C-02** | U-IN-06, U-IN-07 | ✅ GREEN — G0/G1 empty count → `INPUT_EMPTY_COUNT` |
 | C-03 | U-IN-08 | 🔴 RED skeleton |
 | C-04~06 | U-FLOW-02*, U-OUT-01~03 | 🔴 RED skeleton |
 
-**최근 pytest:** `46 passed` / `23 failed` (실패 23건 = RED skeleton `pytest.fail`)
+**최근 pytest:** `48 passed` / `21 failed` (실패 21건 = RED skeleton `pytest.fail`)
 
 ## AC-FR-01-01 체크리스트 (Test Plan BV 기준)
 
@@ -107,6 +107,6 @@ Start-Process htmlcov\index.html
 
 ## 다음 단계
 
-1. **C-02** — U-IN-06/07 (empty count) skeleton → assert 교체
+1. **C-03** — U-IN-08 (value range) skeleton → assert 교체
 2. Domain RED 순서(D-F05 → D-H01): `PartialGrid4x4` · `MagicSquareValidator`
 3. 브랜치 `stabilize/green` — [PR #5](https://github.com/tworimpa/MagicSquare_18/pull/5)

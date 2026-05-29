@@ -1,7 +1,7 @@
 """Track A — U-IN-04~08 (Report/04).
 
 U-IN-01~03: `test_ac_fr_01_01_red.py` — duplicate forbidden.
-U-IN-04~05: GREEN (C-01). U-IN-06~08: RED skeleton.
+U-IN-04~06: GREEN (C-01~02). U-IN-07~08: RED skeleton.
 """
 
 from __future__ import annotations
@@ -11,8 +11,21 @@ import pytest
 from magicsquare.boundary.error_codes import ErrorCode
 from magicsquare.boundary.input_validator import validate_input_contract
 
-# G0 — complete grid (0 empty cells): see tests/entity/conftest.py GRID_G0 comment
-# G1 — three empties variant: G1 + one extra 0
+# G0 — Example Grid A (complete, 0 empty cells)
+GRID_G0: list[list[int]] = [
+    [16, 3, 2, 13],
+    [5, 10, 11, 8],
+    [9, 6, 7, 12],
+    [4, 15, 14, 1],
+]
+
+# G1 — blanks (2,2) and (3,3) 1-index; missing {7, 10}
+GRID_G1: list[list[int]] = [
+    [16, 3, 2, 13],
+    [5, 0, 11, 8],
+    [9, 6, 0, 12],
+    [4, 15, 14, 1],
+]
 
 
 class TestUIn04FourByThree:
@@ -44,21 +57,32 @@ class TestUIn05FiveByFive:
 
 
 class TestUIn06ZeroEmptyCells:
-    """U-IN-06 — 0 empty cells (G0) → E002."""
+    """U-IN-06 — 0 empty cells (G0) → INPUT_EMPTY_COUNT."""
 
     def test_u_in_06_zero_empty_cells_returns_e002(self) -> None:
         # Given — G0 complete grid (no zeros)
-        # When — validate_input_contract(matrix)
-        pytest.fail("RED: U-IN-06 — G0 zero empties → E002 INPUT_EMPTY_COUNT")
+        matrix = [row[:] for row in GRID_G0]
+
+        # When
+        result = validate_input_contract(matrix)
+
+        # Then
+        assert result is ErrorCode.INPUT_EMPTY_COUNT
 
 
 class TestUIn07ThreeEmptyCells:
-    """U-IN-07 — 3 empty cells → E002."""
+    """U-IN-07 — 3 empty cells → INPUT_EMPTY_COUNT."""
 
     def test_u_in_07_three_empty_cells_returns_e002(self) -> None:
         # Given — G1 with additional 0 (3 blanks total)
-        # When — validate_input_contract(matrix)
-        pytest.fail("RED: U-IN-07 — 3 empties → E002 INPUT_EMPTY_COUNT")
+        matrix = [row[:] for row in GRID_G1]
+        matrix[0][0] = 0
+
+        # When
+        result = validate_input_contract(matrix)
+
+        # Then
+        assert result is ErrorCode.INPUT_EMPTY_COUNT
 
 
 class TestUIn08NegativeCell:
