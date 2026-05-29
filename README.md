@@ -55,6 +55,7 @@ Start-Process htmlcov\index.html
 | [Report/](Report/) | [07.pytest-html-reports_Report.md](Report/07.pytest-html-reports_Report.md) | pytest HTML 테스트·커버리지 리포트 자동 생성 |
 | [Report/](Report/) | [08.golden-master-gm01-gm02_Report.md](Report/08.golden-master-gm01-gm02_Report.md) | Golden Master GM-1 baseline·GM-2 회귀 테스트 |
 | [Report/](Report/) | [09.golden-master-gm03-runbook_Report.md](Report/09.golden-master-gm03-runbook_Report.md) | GM-3 docs·test_gm_01 진입점·pytest 실행 정비 |
+| [Report/](Report/) | [10.refactor-plan-ecb-solve-facade-ui-boundary_Report.md](Report/10.refactor-plan-ecb-solve-facade-ui-boundary_Report.md) | ECB·REFACTOR 계획 — solve_facade / ui_boundary 분석 |
 | [Prompt/](Prompt/) | [00-dialogue-transcript-export.md](Prompt/00-dialogue-transcript-export.md) | 대화형 Transcript Export |
 | [Prompt/](Prompt/) | [03.qa-defect-list-ac-fr-01-01_Prompt.md](Prompt/03.qa-defect-list-ac-fr-01-01_Prompt.md) | 세션 03 Transcript Export |
 | [Prompt/](Prompt/) | [04.dual-track-red-design-fr01-05_Prompt.md](Prompt/04.dual-track-red-design-fr01-05_Prompt.md) | 세션 04 Transcript Export |
@@ -63,6 +64,7 @@ Start-Process htmlcov\index.html
 | [Prompt/](Prompt/) | [07.pytest-html-reports_Prompt.md](Prompt/07.pytest-html-reports_Prompt.md) | 세션 07 Transcript Export |
 | [Prompt/](Prompt/) | [08.golden-master-gm01-gm02_Prompt.md](Prompt/08.golden-master-gm01-gm02_Prompt.md) | 세션 08 Transcript Export (GM-1·GM-2) |
 | [Prompt/](Prompt/) | [09.golden-master-gm03-runbook_Prompt.md](Prompt/09.golden-master-gm03-runbook_Prompt.md) | 세션 09 Transcript Export (GM-3·실행 정비) |
+| [Prompt/](Prompt/) | [10.refactor-plan-ecb-solve-facade-ui-boundary_Prompt.md](Prompt/10.refactor-plan-ecb-solve-facade-ui-boundary_Prompt.md) | 세션 10 Transcript Export (ECB·REFACTOR 계획) |
 | [Prompt/](Prompt/) | [01-executable-prompts-index.md](Prompt/01-executable-prompts-index.md) | 재실행용 프롬프트 모음 |
 
 ## GREEN 진행 (Track A — FR-01)
