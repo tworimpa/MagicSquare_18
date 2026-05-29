@@ -83,8 +83,9 @@ Start-Process htmlcov\index.html
 | **C-14** | U-IN-09/10 | ✅ GREEN — duplicate·17 (src 검증만) |
 | **C-15** | IT-OK01 | ✅ GREEN — `DomainPartialMagicSquareSolver` |
 | **GM-1** | Golden Master | ✅ `tests/golden_master_expected.txt` (5 scenarios) |
+| **GM-2** | Golden Master tests | ✅ `test_golden_master_magic_square.py` (16건) |
 
-**최근 pytest:** `83 passed` (72 + GM-1 11) · `docs/golden-master-design.md`
+**최근 pytest:** `88 passed` · `pytest -m golden_master -v` · `docs/golden-master-design.md`
 
 > **TDD 분리:** `red(C-03~C-12)` = tests/ 배선만 · `green(C-0X)` = src/ 최소 구현만
 

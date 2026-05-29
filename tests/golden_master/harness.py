@@ -2,16 +2,21 @@
 
 from __future__ import annotations
 
+import ast
 import difflib
 import re
 from dataclasses import dataclass
 from pathlib import Path
 
+from magicsquare.boundary.error_codes import ERROR_MESSAGES, ErrorCode
 from magicsquare.boundary.response_models import SuccessResponse
 from magicsquare.control.domain_solver import DomainPartialMagicSquareSolver
 from magicsquare.control.solve_facade import SolveFacade
+from magicsquare.entity.completion_strategy import try_case_a, try_case_b
+from magicsquare.entity.partial_grid_4x4 import find_blank_coords, find_not_exist_nums
 
 Matrix4x4 = list[list[int]]
+Solution6 = list[int]
 
 DEFAULT_EXPECTED_PATH = Path(__file__).resolve().parent.parent / "golden_master_expected.txt"
 
@@ -71,6 +76,17 @@ SCENARIO_ORDER: tuple[str, ...] = (
     "no_valid_solution",
 )
 
+# GM-2 Test Case ID → baseline section (docs/golden-master-design.md)
+GM_TC_SCENARIOS: dict[str, str] = {
+    "GM-TC-01": "normal_success",
+    "GM-TC-02": "reverse_success",
+    "GM-TC-03": "invalid_blank_count",
+    "GM-TC-04": "duplicate_number",
+    "GM-TC-05": "no_valid_solution",
+}
+
+GM_TC_ORDER: tuple[str, ...] = tuple(GM_TC_SCENARIOS.keys())
+
 _SECTION_HEADER = re.compile(r"^\[[a-z][a-z0-9_]*\]$")
 
 
@@ -124,6 +140,118 @@ def capture_scenario_body(name: str, matrix: Matrix4x4) -> str:
         ]
     )
     return "\n".join(lines)
+
+
+def capture_stdout_scenario(name: str, matrix: Matrix4x4) -> str:
+    """CLI 스타일 stdout 캡처용 — 섹션 헤더 + 본문."""
+    return f"[{name}]\n{capture_scenario_body(name, matrix)}"
+
+
+def read_expected_text(path: Path) -> str:
+    """기준 파일 전체 텍스트를 읽는다."""
+    return path.read_text(encoding="utf-8")
+
+
+def assert_text_equals(expected: str, actual: str, label: str) -> None:
+    """open(expected).read() vs actual 비교 — 불일치 시 diff 출력."""
+    if expected == actual:
+        return
+    diff = unified_diff(expected, actual, label)
+    raise AssertionError(
+        f"Golden Master [{label}] mismatch — set GM_APPROVE=1 to update baseline\n"
+        f"--- expected\n{expected}\n+++ actual\n{actual}\n{diff}"
+    )
+
+
+def assert_section_matches(
+    path: Path,
+    section_name: str,
+    *,
+    approve: bool = False,
+) -> str:
+    """단일 섹션 approve 패턴 — 없으면 전체 파일 생성."""
+    matrix = SCENARIO_GRIDS[section_name]
+    actual_body = capture_scenario_body(section_name, matrix)
+
+    if approve or not path.is_file():
+        write_expected_file(path)
+        return actual_body
+
+    document = parse_document(read_expected_text(path))
+    expected_body = document.sections.get(section_name)
+    if expected_body is None:
+        write_expected_file(path)
+        return actual_body
+
+    assert_text_equals(expected_body, actual_body, section_name)
+    return actual_body
+
+
+def parse_solution6(body: str) -> Solution6:
+    """섹션 본문에서 Output Solution6를 파싱한다."""
+    lines = body.splitlines()
+    try:
+        output_idx = lines.index("Output:")
+    except ValueError as exc:
+        raise ValueError("Output: block not found") from exc
+    return ast.literal_eval(lines[output_idx + 1].strip())
+
+
+def parse_error_contract(body: str) -> tuple[ErrorCode, str]:
+    """섹션 본문에서 Error 계약을 파싱한다."""
+    lines = body.splitlines()
+    error_idx = lines.index("Error:")
+    message_idx = lines.index("Message:")
+    code = ErrorCode(lines[error_idx + 1].strip())
+    message = lines[message_idx + 1].strip()
+    return code, message
+
+
+def validate_solution6_format(result: Solution6) -> None:
+    """int[6] 형식·1-index·값 범위 불변조건."""
+    assert len(result) == 6
+    r1, c1, n1, r2, c2, n2 = result
+    for coord in (r1, c1, r2, c2):
+        assert 1 <= coord <= 4
+    for value in (n1, n2):
+        assert 1 <= value <= 16
+    assert n1 != n2
+
+
+def validate_row_major_coords(matrix: Matrix4x4, result: Solution6) -> None:
+    """row-major 빈칸 순서와 Solution6 좌표 일치."""
+    first, second = find_blank_coords(matrix)
+    r1, c1, _, r2, c2, _ = result
+    assert (r1, c1) == first
+    assert (r2, c2) == second
+
+
+def validate_case_a_placement(matrix: Matrix4x4, result: Solution6) -> None:
+    """작은 수 우선(Case A) — smaller→first, larger→second."""
+    first, second = find_blank_coords(matrix)
+    smaller, larger = find_not_exist_nums(matrix)
+    case_a = try_case_a(matrix, first, second, smaller, larger)
+    assert case_a is not None
+    assert result == case_a
+    r1, c1, n1, r2, c2, n2 = result
+    assert n1 == smaller and n2 == larger
+
+
+def validate_case_b_fallback(matrix: Matrix4x4, result: Solution6) -> None:
+    """reverse fallback(Case B) — Case A 실패 후 larger→first."""
+    first, second = find_blank_coords(matrix)
+    smaller, larger = find_not_exist_nums(matrix)
+    assert try_case_a(matrix, first, second, smaller, larger) is None
+    case_b = try_case_b(matrix, first, second, smaller, larger)
+    assert case_b is not None
+    assert result == case_b
+    r1, c1, n1, r2, c2, n2 = result
+    assert n1 == larger and n2 == smaller
+
+
+def validate_error_contract(code: ErrorCode, message: str) -> None:
+    """Error Contract — SSOT ERROR_MESSAGES 완전 일치."""
+    assert message == ERROR_MESSAGES[code]
 
 
 def generate_document() -> GoldenMasterDocument:
@@ -209,7 +337,7 @@ def assert_matches_expected(
         diff = unified_diff(expected_text, actual_text, path.name)
         raise AssertionError(
             "Golden Master mismatch — run with GM_APPROVE=1 to update baseline:\n"
-            f"{diff}"
+            f"--- expected\n{expected_text}+++ actual\n{actual_text}{diff}"
         )
 
     return expected_doc
