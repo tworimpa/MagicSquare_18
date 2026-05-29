@@ -17,6 +17,30 @@
 
 - **입력:** `int[4][4]` (0=빈칸, 빈칸 2개, 0 또는 1~16, non-zero 중복 금지)
 - **출력:** `int[6]` = `[r1,c1,n1,r2,c2,n2]` (1-index; Case A/B 배치 규칙)
+- **에러 코드 SSOT:** `src/magicsquare/boundary/error_codes.py` — `INPUT_NULL`, `INPUT_ROW_COUNT`, `INPUT_COL_COUNT` 등 8종 (`INVALID_SIZE`는 PRD에 없음)
+
+## 개발 환경 · pytest
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -e ".[dev]"
+```
+
+`pytest` 기본 실행 시 HTML 리포트가 자동 생성된다 (`pyproject.toml` `addopts`).
+
+| 산출물 | 경로 | 내용 |
+|---|---|---|
+| 테스트 결과 | `reports/pytest-report.html` | 통과/실패·traceback |
+| 커버리지 | `htmlcov/index.html` | 라인·브랜치 커버리지 |
+
+```powershell
+python -m pytest
+Start-Process reports\pytest-report.html
+Start-Process htmlcov\index.html
+```
+
+커버리지·HTML 리포트 없이 실행: `python -m pytest --no-cov --override-ini="addopts=-v"`
 
 ## Report · Prompt
 
@@ -36,35 +60,53 @@
 | [Prompt/](Prompt/) | [07.pytest-html-reports_Prompt.md](Prompt/07.pytest-html-reports_Prompt.md) | 세션 07 Transcript Export |
 | [Prompt/](Prompt/) | [01-executable-prompts-index.md](Prompt/01-executable-prompts-index.md) | 재실행용 프롬프트 모음 |
 
-## RED 단계 To-Do 리스트
+## GREEN 진행 (Track A — FR-01)
 
-> 이 체크리스트는 [docs/test_plan.md](docs/test_plan.md) 기반으로 생성되었습니다.
-> 각 항목은 RED(실패 테스트 작성) 완료 시 체크합니다.
+> SSOT: [docs/test_plan.md](docs/test_plan.md) BV-01~06 · 커밋 묶음 **C-00** 완료 (`green(C-00): align ac_fr tests to INPUT_* SSOT`)
 
-### Track A — UI / Boundary 테스트
-- [ ] TC-A-01: grid=None 입력 → 실패 결과 반환 (Happy Path of Failure)
-- [ ] TC-A-02: code가 정확히 "INVALID_SIZE" 문자열인지 검증
-- [ ] TC-A-03: message가 "Grid must be 4x4." 와 문자 단위 동일한지 검증
-- [ ] TC-A-04: grid=None 시 Domain 진입점 0회 호출 (mock/spy 검증)
-- [ ] TC-A-05: grid=[] 빈 리스트 → 실패 결과 반환
-- [ ] TC-A-06: grid=3×4 크기 불일치 → 실패 결과 반환
-- [ ] TC-A-07: 반환 객체 타입이 지정 실패 결과 구조체인지 검증
+| Commit | Test ID | 상태 |
+|---|---|---|
+| **C-00** | U-C02, U-IN-01~03 (null·size) | ✅ GREEN — `test_ac_fr_01_01_red.py` 9건, `test_input_validator` U-C02 |
+| C-01 | U-IN-04, U-IN-05 | 🔴 RED skeleton |
+| C-02 | U-IN-06, U-IN-07 | 🔴 RED skeleton |
+| C-03 | U-IN-08 | 🔴 RED skeleton |
+| C-04~06 | U-FLOW-02*, U-OUT-01~03 | 🔴 RED skeleton |
 
-### Track B — Domain / Logic 테스트
-- [ ] TC-B-01: resolve()가 None grid를 직접 받지 않음을 격리 검증
-- [ ] TC-B-02: Boundary가 None 분기를 처리 후 resolve() 미호출 확인
-- [ ] TC-B-03: resolve() mock이 호출됐을 경우 테스트 실패 처리
-- [ ] TC-B-04: AC-FR-01-02~05 범위의 케이스는 이 커밋에 포함하지 않음 확인
+**최근 pytest:** `44 passed` / `25 failed` (실패 25건 = RED skeleton `pytest.fail`)
+
+## AC-FR-01-01 체크리스트 (Test Plan BV 기준)
+
+> [docs/test_plan.md](docs/test_plan.md) BV-01~06 · `tests/boundary/test_ac_fr_01_01_red.py`
+
+### Track A — UI / Boundary
+- [x] TC-A-01: `grid=None` → `ErrorResponse` 반환 (BV-01)
+- [x] TC-A-02: `code`가 `INPUT_NULL` (SSOT `ErrorCode`)
+- [x] TC-A-03: `message`가 `ERROR_MESSAGES[INPUT_NULL]`과 문자 단위 동일
+- [x] TC-A-04: `grid=None` 시 Domain `solve` 0회 호출 (spy/mock)
+- [x] TC-A-05: `grid=[]` → `INPUT_ROW_COUNT` (BV-02)
+- [x] TC-A-06: `grid=3×4` → `INPUT_ROW_COUNT` (BV-04)
+- [x] TC-A-07: 반환 타입 `ErrorResponse`, 행 0열 `[[]]*4` → `INPUT_COL_COUNT` (BV-03)
+
+### Track B — Domain 격리 (AC-FR-01-01 범위)
+- [x] TC-B-01: Boundary가 `None` 분기 처리 — Domain에 `None` 미전달
+- [x] TC-B-02: `grid=None` 후 `solve` 미호출
+- [x] TC-B-03: `solve` 호출 시 테스트 실패 처리
+- [x] TC-B-04: AC-FR-01-02~05 전용 케이스 모듈 미포함
 
 ### 커버리지 목표
-- [ ] Domain Logic: 95%+ (pip install pytest-cov)
-- [ ] Boundary Layer: 85%+
-- [ ] 전체 TOTAL: 90%+
+- [ ] Domain Logic: 95%+
+- [x] Boundary Layer: 85%+ (현재 ~90%+, `htmlcov/index.html` 참고)
+- [x] 전체 TOTAL: 90%+ (현재 ~92%)
 
-### 결함 목록 연결
-- [x] [defect_list.md](defect_list.md) 생성 및 발견 결함 기록 (DEF-001~007, Open 5건)
-- [ ] 모든 결함 수정 후 회귀 테스트 통과 확인
+### 결함 목록
+- [x] [defect_list.md](defect_list.md) 생성 (DEF-001~007)
+- [x] DEF-001~005: 테스트 SSOT 정렬 (C-00)
+- [x] DEF-006: README `INPUT_*` 반영 (본 갱신)
+- [x] DEF-007: `test_ac_fr_01_01_red.py` docstring SSOT 정렬 (C-00)
+- [ ] RED skeleton 25건 GREEN 후 전체 `69 passed` 달성
 
 ## 다음 단계
 
-Domain RED 순서(D-F05 → D-H01)에 따라 `PartialGrid4x4` · `MagicSquareValidator`부터 TDD 시작.
+1. **C-01** — U-IN-04/05 (4×3, 5×5) skeleton → assert 교체
+2. Domain RED 순서(D-F05 → D-H01): `PartialGrid4x4` · `MagicSquareValidator`
+3. 브랜치 `stabilize/green` — [PR #5](https://github.com/tworimpa/MagicSquare_18/pull/5)
