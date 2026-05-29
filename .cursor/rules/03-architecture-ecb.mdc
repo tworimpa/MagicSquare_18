@@ -1,0 +1,51 @@
+---
+description: ECB 아키텍처 — 레이어 역할, 의존성 방향, Dual-Track
+alwaysApply: true
+---
+
+# 03. Architecture (ECB)
+
+## 3.1 Layers
+
+| # | Layer | Role | Examples |
+|---|-------|------|----------|
+| 1 | **Boundary** | 외부 입출력 (UI, API, CLI) | InputValidator, OutputValidator, ErrorMapper, UIBoundary, SolveFacade |
+| 2 | **Control** | Use Case 오케스트레이션 | SolveFacade, ApplicationService |
+| 3 | **Entity** | 도메인 데이터·규칙 | PartialGrid4x4, MagicSquareValidator, SolvePartialMagicSquare |
+
+## 3.2 Layer Responsibilities
+
+**3.2.1 Boundary**
+1. `int[4][4]` 입력 계약 검증 (null, 크기, 범위, 빈칸 수, 중복)
+2. Domain 호출 및 `int[6]` 출력 포맷 검증
+3. ErrorResponse / SuccessResponse 매핑 (에러 메시지 8종 완전 일치)
+
+**3.2.2 Control**
+1. Boundary와 Entity 사이 Use Case 조율
+2. SolvePartialMagicSquare 실행 흐름 연결
+3. MatrixRepository 등 외부 저장소 호출 (선택)
+
+**3.2.3 Entity**
+1. Value Object (PartialGrid4x4, Solution6, EmptyCellPair 등)
+2. Domain Service (MagicSquareValidator, CompletionStrategy 등)
+3. 불변조건 INV-G*, INV-M*, INV-S* 검증
+4. 외부 레이어·I/O에 대한 의존 금지
+
+## 3.3 Dependency Direction
+
+**Allowed**
+1. boundary → control
+2. boundary → entity (Use Case 직접 호출, Facade 없을 때)
+3. control → entity
+4. control → data (Repository 인터페이스, DTO만)
+
+**Forbidden**
+1. entity → boundary
+2. entity → control
+3. entity → data
+4. boundary → data (control 경유 필수)
+
+## 3.4 Dual-Track
+
+1. **Domain track**: Entity RED 우선 (D-F05 → D-H01); Domain Mock 없이 순수 pytest
+2. **Boundary track**: Boundary Contract RED; Domain은 Mock; Domain 로직 유입 금지

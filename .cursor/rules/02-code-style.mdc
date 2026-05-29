@@ -1,0 +1,12 @@
+---
+description: Python 코드 스타일 — PEP8, 타입힌트, docstring, 줄 길이
+alwaysApply: true
+---
+
+# 02. Code Style
+
+1. **Python version**: 3.10+
+2. **Style guide**: PEP8 엄격 준수
+3. **Type hints**: 모든 함수 파라미터와 반환값에 필수
+4. **Docstring**: Google 스타일, 모든 public 메서드에 필수
+5. **Max line length**: 88

@@ -1,0 +1,50 @@
+---
+description: TDD RED / GREEN / REFACTOR 단계별 규칙
+alwaysApply: true
+---
+
+# 04. TDD Rules
+
+## 4.1 RED Phase
+
+**Description**: 실패하는 테스트를 먼저 작성하고, pytest로 RED를 확인한 뒤 구현에 착수한다.
+
+**Rules**
+1. 구현 코드 작성 전에 대상 Test ID(D-*, U-*, DL-*, IT-*)에 맞는 테스트를 작성한다.
+2. pytest 실행으로 해당 테스트가 RED(실패)임을 확인한다.
+3. `docs/04`의 RED 우선 순서(D-F05 → D-H01)를 따른다.
+4. Dual-Track 시 Domain 트랙과 Boundary 트랙을 혼합하지 않는다.
+
+**Must NOT**
+1. RED 확인 없이 production 코드(`src/`)를 추가·수정하지 않는다.
+2. 테스트를 통과시키기 위해 assertion을 약화하지 않는다.
+3. GREEN을 가정하고 테스트를 건너뛰지 않는다.
+
+## 4.2 GREEN Phase
+
+**Description**: RED 테스트를 통과시키는 최소 코드만 작성하여 GREEN 상태를 만든다.
+
+**Rules**
+1. 현재 RED 테스트를 통과시키는 최소 코드만 작성한다.
+2. pytest 실행으로 해당 테스트가 GREEN(통과)임을 확인한다.
+3. Entity 레이어는 외부 의존 없이 순수 Python으로 구현한다.
+
+**Must NOT**
+1. 이 단계에서 리팩터링·구조 개선·부가 기능 추가를 하지 않는다.
+2. 테스트를 수정·삭제·약화하여 통과시키지 않는다.
+3. Boundary 레이어에 Domain 알고리즘을 직접 구현하지 않는다.
+
+## 4.3 REFACTOR Phase
+
+**Description**: 관찰 가능한 동작은 유지한 채 구조·가독성·중복을 개선한다.
+
+**Rules**
+1. 리팩터링 전후 pytest 전체가 GREEN임을 유지한다.
+2. 레이어별 커버리지 목표를 유지하거나 개선한다 (Entity ≥95%, Boundary ≥85%, Data ≥80%).
+3. ECB 의존성 방향을 위반하지 않는다.
+4. `docs/04` 회귀 규칙(RG-01~RG-05)을 준수한다.
+
+**Must NOT**
+1. 관찰 가능한 동작(기능)을 변경하지 않는다.
+2. 테스트 assertion을 기능 변경 없이 임의로 수정하지 않는다.
+3. Entity에 I/O·Boundary·Repository 의존을 추가하지 않는다.

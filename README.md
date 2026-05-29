@@ -10,6 +10,7 @@
 | 2 | [docs/02-problem-framing.md](docs/02-problem-framing.md) | STEP 6: 사용자, 성공 기준, 실패 시나리오 |
 | 3 | [docs/03-acceptance-criteria.md](docs/03-acceptance-criteria.md) | TDD Acceptance Criteria (Given/When/Then) |
 | 4 | [docs/04-dual-track-clean-architecture-design.md](docs/04-dual-track-clean-architecture-design.md) | Dual-Track UI + Logic / Clean Architecture 설계 |
+| 5 | `docs/05-tdd-design.md` (권장) | TDD 설계 12섹션 — Turn 11 채팅 산출, 파일 저장 대기 |
 
 ## 구현 계약 (확정)
 

@@ -1,0 +1,32 @@
+---
+description: AI 에이전트 코딩 전·중·후 행동 규칙
+alwaysApply: true
+---
+
+# 08. AI Behavior
+
+## 8.1 Before Coding
+
+1. 코드 작성 전 `docs/03`·`docs/04`에서 해당 Test ID와 계약을 확인한다.
+2. 코드 작성 전 `tests/` 아래 관련 레이어·Test ID 테스트 파일 존재 여부를 확인한다.
+3. Entity 작업 시 `tests/entity/` RED 상태를 먼저 확인한다.
+4. Boundary 작업 시 Domain Mock 사용 여부와 `tests/boundary/` 계약 테스트를 확인한다.
+
+## 8.2 During Coding
+
+1. ECB 레이어 경계 위반 금지 — entity는 boundary/control/data를 import하지 않는다.
+2. 타입힌트 없는 함수 생성 금지 — 모든 public 함수에 파라미터·반환 type hint 필수.
+3. 현재 TDD phase(red/green/refactor)를 명시하고 해당 phase 규칙만 적용한다.
+4. MagicSquare 전역 계약(`int[4][4]`→`int[6]`, 1-index, Case A/B)을 위반하는 코드를 생성하지 않는다.
+
+## 8.3 After Coding
+
+1. pytest를 실행하여 RED/GREEN 상태를 보고한다.
+2. TDD rules 위반(RED 없이 구현, green_phase 리팩터링, 테스트 약화) 시 ⚠️ 경고를 출력한다.
+3. 생성·수정 파일이 `07-file-structure` 트리와 일치하는지 확인한다.
+
+## 8.4 Must NOT
+
+1. 사용자 요청 없이 테스트 assertion을 약화·삭제하지 않는다.
+2. `print()`로 디버깅 코드를 남기지 않는다.
+3. docs SSOT와 다른 입출력 계약·에러 메시지를 임의로 정의하지 않는다.

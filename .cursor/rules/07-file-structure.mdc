@@ -1,0 +1,38 @@
+---
+description: src/ 및 tests/ 디렉터리 구조
+alwaysApply: true
+---
+
+# 07. File Structure
+
+```
+src/
+  magicsquare/
+    __init__.py
+    boundary/          # UI, API, CLI — 입출력 계약·에러 매핑
+      __init__.py
+      input_validator.py
+      output_validator.py
+      error_mapper.py
+      ui_boundary.py
+    control/           # Use Case 오케스트레이션
+      __init__.py
+      solve_facade.py
+    entity/            # VO, Domain Service, 불변조건
+      __init__.py
+      constants.py
+      partial_grid_4x4.py
+      magic_square_validator.py
+      completion_strategy.py
+      solve_partial_magic_square.py
+    data/              # Repository (ECB 외부, control이 소유)
+      __init__.py
+      matrix_repository.py
+tests/
+  conftest.py
+  entity/              # D-H*, D-F*, D-E*
+  boundary/            # U-C* (Domain Mock)
+  control/
+  data/                # DL-*
+  integration/         # IT-*
+```
